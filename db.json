@@ -1,0 +1,58 @@
+{
+  "matches": [
+    {
+      "id": "2",
+      "team1": "Australia",
+      "team2": "England",
+      "date": "2026-11-20",
+      "venue": "Melbourne Cricket Ground",
+      "format": "ODI"
+    },
+    {
+      "team1": "pakistan",
+      "team2": "india",
+      "date": "2026-10-14",
+      "venue": "chennei",
+      "format": "T20",
+      "id": "5CtWq7GBiP4"
+    }
+  ],
+  "teams": [
+    {
+      "id": "1",
+      "name": "Pakistan",
+      "captain": "Babar Azam",
+      "coach": "Gary Kirsten"
+    },
+    {
+      "id": "2",
+      "name": "India",
+      "captain": "Rohit Sharma",
+      "coach": "Rahul Dravid"
+    }
+  ],
+  "stadiums": [
+    {
+      "id": "1",
+      "name": "Gaddafi Stadium",
+      "city": "Lahore",
+      "capacity": "34000"
+    },
+    {
+      "id": "2",
+      "name": "National Stadium",
+      "city": "Karachi",
+      "capacity": "30000"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "1",
+      "customerName": "Ali Khan",
+      "matchId": null,
+      "seats": "2",
+      "totalPrice": "5000"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
