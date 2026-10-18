@@ -1,64 +1,82 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMatchById, updateMatch } from '../../api/matches';
+import { Save, ArrowLeft } from 'lucide-react';
 
 const EditMatch = () => {
-  const { id } = useParams(); // URL se ID nikalne ke liye
-  const navigate = useNavigate(); // Update ke baad wapas list par jane ke liye
-  const [formData, setFormData] = useState({
-    team1: '', team2: '', date: '', venue: '', format: 'T20'
-  });
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ team1: '', team2: '', date: '', venue: '', format: 'T20' });
   const [loading, setLoading] = useState(true);
 
-  // Purana data form mein load karna
   useEffect(() => {
     const fetchMatch = async () => {
       try {
-        const response = await getMatchById(id);
-        setFormData(response.data);
-      } catch (error) {
-        console.error("Error fetching match:", error);
-      } finally {
-        setLoading(false);
-      }
+        const res = await getMatchById(id);
+        setFormData(res.data);
+      } catch (error) { console.error(error); } finally { setLoading(false); }
     };
     fetchMatch();
   }, [id]);
 
-  // Update save karna
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       await updateMatch(id, formData);
       alert("Match updated successfully!");
-      navigate('/matches'); // Wapas list par le jayein
-    } catch (error) {
-      console.error("Error updating match:", error);
-    }
+      navigate('/matches');
+    } catch (error) { console.error(error); }
   };
 
-  if (loading) return <div className="text-center p-5 font-bold">Loading...</div>;
+  if (loading) return <div className="text-center p-10 font-bold text-slate-500 animate-pulse">Loading...</div>;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto mt-10">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Match</h2>
-      <form onSubmit={handleUpdate} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" placeholder="Team 1" value={formData.team1} onChange={(e) => setFormData({...formData, team1: e.target.value})} required className="border p-2 rounded" />
-          <input type="text" placeholder="Team 2" value={formData.team2} onChange={(e) => setFormData({...formData, team2: e.target.value})} required className="border p-2 rounded" />
-          <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} required className="border p-2 rounded" />
-          <input type="text" placeholder="Venue" value={formData.venue} onChange={(e) => setFormData({...formData, venue: e.target.value})} required className="border p-2 rounded" />
-        </div>
+    <div className="max-w-3xl mx-auto mt-10">
+      <button onClick={() => navigate('/matches')} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-semibold mb-6 transition-colors">
+        <ArrowLeft size={18} /> Back to Matches
+      </button>
+
+      <div className="bg-white p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100">
+        <h2 className="text-2xl font-extrabold text-slate-800 mb-8">Edit Match Details</h2>
         
-        <div className="flex gap-4 pt-4">
-          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition w-full md:w-auto">
-            Update Match
-          </button>
-          <button type="button" onClick={() => navigate('/matches')} className="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 transition w-full md:w-auto">
-            Cancel
-          </button>
-        </div>
-      </form>
+        <form onSubmit={handleUpdate} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-slate-600 mb-2">Team 1</label>
+              <input type="text" value={formData.team1} onChange={e => setFormData({...formData, team1: e.target.value})} required className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-600 mb-2">Team 2</label>
+              <input type="text" value={formData.team2} onChange={e => setFormData({...formData, team2: e.target.value})} required className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-600 mb-2">Date</label>
+              <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-slate-600" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-600 mb-2">Venue</label>
+              <input type="text" value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})} required className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-bold text-slate-600 mb-2">Format</label>
+              <select value={formData.format} onChange={e => setFormData({...formData, format: e.target.value})} className="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-slate-700">
+                <option value="T20">T20</option>
+                <option value="ODI">ODI</option>
+                <option value="Test">Test</option>
+              </select>
+            </div>
+          </div>
+          
+          <div className="flex gap-4 pt-6">
+            <button type="submit" className="bg-emerald-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/30 flex items-center gap-2 w-full justify-center">
+              <Save size={18} /> Save Changes
+            </button>
+            <button type="button" onClick={() => navigate('/matches')} className="bg-slate-100 text-slate-600 font-bold px-8 py-3 rounded-xl hover:bg-slate-200 transition-all w-full justify-center">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
